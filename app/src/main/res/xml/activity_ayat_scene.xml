@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/start">
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+<!--        <Constraint android:id="@id/rlBanner"-->
+<!--            android:alpha="0"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:paddingStart="@dimen/_8sdp"-->
+<!--            android:paddingEnd="@dimen/_8sdp"-->
+<!--            android:paddingBottom="@dimen/_4sdp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/guideline2"/>-->
+        <Constraint
+            android:id="@+id/scrollable_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:fadingEdge="vertical"
+            android:fadingEdgeLength="@dimen/_50sdp"
+            android:fillViewport="true"
+            android:requiresFadingEdge="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guideline2"
+            />
+    </ConstraintSet>
+
+    <Transition
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@+id/start"
+        app:motionInterpolator="easeInOut">
+
+        <OnSwipe
+            app:duration="100"
+            app:dragDirection="dragUp"
+            app:dragScale="90"
+            app:moveWhenScrollAtTop="true"
+            app:onTouchUp="autoComplete"
+            app:touchAnchorId="@id/scrollable_content"
+            app:touchAnchorSide="top" />
+        <KeyFrameSet ></KeyFrameSet>
+
+    </Transition>
+</MotionScene>

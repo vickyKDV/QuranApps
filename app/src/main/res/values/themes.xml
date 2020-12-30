@@ -1,0 +1,31 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.QuranApps" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/comfortaa</item>
+        <item name="font">@font/comfortaa</item>
+        <item name="android:textSize">@dimen/_10ssp</item>
+        <item name="android:textColor">@color/textFont</item>
+    </style>
+
+    <style name="Theme.QuranApps.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.QuranApps.AppBarOverlay" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
+    <style name="Theme.QuranApps.PopupOverlay" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
+
+    <style name="ToolbarBold" parent="Widget.AppCompat.TextView">
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

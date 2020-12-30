@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">QuranApps</string>
+    <string name="quran_app">Quran App</string>
+    <string name="sample_name">Kyan Al\'Khadavie</string>
+    <string name="assalamualaikum">Assalamualaikum,</string>
+    <string name="sampe_ayat">Ayat : 1</string>
+    <string name="terakhir_dibaca">Terakhir dibaca</string>
+    <string name="todo">TODO</string>
+</resources>
