@@ -168,7 +168,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/bg_player_dark"
         android:gravity="bottom"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

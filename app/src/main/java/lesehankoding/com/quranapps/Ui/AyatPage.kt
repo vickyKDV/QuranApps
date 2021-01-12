@@ -76,97 +76,96 @@ class AyatPage : AppCompatActivity()  {
         AndroidNetworking.get("https://api.quran.sutanlab.id/surah/$number")
             .build()
             .getAsOkHttpResponseAndObject(
-                ModelAyat::class.java,
-                object : OkHttpResponseAndParsedRequestListener<ModelAyat> {
-                    override fun onResponse(okHttpResponse: Response?, response: ModelAyat?) {
-                        if (okHttpResponse!!.isSuccessful) {
-                            if (response?.code == 200) {
-                                val list: ArrayList<VersesItem> = ArrayList()
-                                val playList: ArrayList<JcAudio> = ArrayList()
-                                playList.clear()
-                                var title: String? = null
-                                for (i in response.data!!.verses!!.indices) {
-                                    val item = response.data.verses!![i]?.copy()!!
-                                    Log.d("rlBanner", "onResponse: ${item.toString()}");
-                                    list.add(item)
-                                    title =
-                                        "${response.data.verses[i]?.text?.transliteration?.en} - ${item.translation?.id}"
-                                    val audio =
-                                        "https://cdn.islamic.network/quran/audio/64/ar.alafasy/${item.number?.inSurah}.mp3"
-                                    playList?.add(JcAudio.createFromURL(title, "${audio}")
+                    ModelAyat::class.java,
+                    object : OkHttpResponseAndParsedRequestListener<ModelAyat> {
+                        override fun onResponse(okHttpResponse: Response?, response: ModelAyat?) {
+                            if (okHttpResponse!!.isSuccessful) {
+                                if (response?.code == 200) {
+                                    val list: ArrayList<VersesItem> = ArrayList()
+//                                    val playList: ArrayList<JcAudio> = ArrayList()
+//                                    playList.clear()
+                                    val jcAudios = java.util.ArrayList<JcAudio>()
+                                    var title: String?
+                                    for (i in response.data!!.verses!!.indices) {
+                                        val item = response.data.verses!![i]?.copy()!!
+                                        Log.d("rlBanner", "onResponse: ${item.toString()}");
+                                        list.add(item)
+                                        title =
+                                                "${response.data.verses[i]?.text?.transliteration?.en} - ${item.translation?.id}"
+                                        val audio = response.data.verses[i]?.audio!!.secondary!![0]!![0]
+//                                                "https://cdn.islamic.network/quran/audio/64/ar.alafasy/${item.number?.inSurah}.mp3"
+                                        jcAudios.add(JcAudio.createFromURL(title, "${audio}")
+                                        )
+                                    }
+
+                                    jcplayer.initPlaylist(jcAudios)
+
+
+                                    val adapter = AdapterAyat(list)
+                                    scrollable_content.adapter = adapter
+                                    scrollable_content.layoutManager = LinearLayoutManager(
+                                            this@AyatPage,
+                                            RecyclerView.VERTICAL,
+                                            false
                                     )
-                                }
 
+                                    adapter.apply {
+                                        adapter.SetOnItemClickListener(object :
+                                                AdapterAyat.SetOnClickListener<VersesItem> {
+                                            override fun onShare(
+                                                    view: View,
+                                                    position: Int,
+                                                    dataItem: VersesItem
+                                            ) {
+                                                Log.d("rlBanner", "onClick: Share");
+                                            }
 
-
-                                jcplayer.initPlaylist(playList)
-
-
-                                val adapter = AdapterAyat(list)
-                                scrollable_content.adapter = adapter
-                                scrollable_content.layoutManager = LinearLayoutManager(
-                                    this@AyatPage,
-                                    RecyclerView.VERTICAL,
-                                    false
-                                )
-
-                                adapter.apply {
-                                    adapter.SetOnItemClickListener(object :
-                                        AdapterAyat.SetOnClickListener<VersesItem> {
-                                        override fun onShare(
-                                            view: View,
-                                            position: Int,
-                                            dataItem: VersesItem
-                                        ) {
-                                            Log.d("rlBanner", "onClick: Share");
-                                        }
-
-                                        override fun onPlay(
-                                            view: View,
-                                            position: Int,
-                                            dataItem: VersesItem
-                                        ) {
-                                            Log.d(
-                                                "rlBanner",
-                                                "onClick: ${dataItem.audio?.primary}"
-                                            );
+                                            override fun onPlay(
+                                                    view: View,
+                                                    position: Int,
+                                                    dataItem: VersesItem
+                                            ) {
+//                                                Log.d(
+//                                                        "rlBanner",
+//                                                        "onClick: ${dataItem.audio?.primary}"
+//                                                );
 
 //                                            jcplayer.createNotification(R.drawable.ic_quran)
-                                            jcplayer.playAudio(jcplayer.myPlaylist!![position])
+                                                jcplayer.playAudio(jcplayer.myPlaylist!![position])
 //                                                Utils.PlayQuran(this@AyatPage, dataItem.audio?.primary!!)
 //                                                HXMusic.music().play(this@AyatPage)
 
-                                        }
+                                            }
 
-                                        override fun onBookMark(
-                                            view: View,
-                                            position: Int,
-                                            dataItem: VersesItem
-                                        ) {
-                                            Log.d(
-                                                "rlBanner",
-                                                "onClick: ${dataItem.number?.inSurah}"
-                                            );
-                                        }
+                                            override fun onBookMark(
+                                                    view: View,
+                                                    position: Int,
+                                                    dataItem: VersesItem
+                                            ) {
+                                                Log.d(
+                                                        "rlBanner",
+                                                        "onClick: ${dataItem.number?.inSurah}"
+                                                );
+                                            }
 
-                                    })
+                                        })
+                                    }
+
+
                                 }
-
-
+                                progressDialog.dismiss()
+                            } else {
+                                progressDialog.dismiss()
                             }
-                            progressDialog.dismiss()
-                        } else {
-                            progressDialog.dismiss()
                         }
-                    }
 
-                    override fun onError(anError: ANError?) {
-                        progressDialog.dismiss()
-                        Log.d("rlBanner", "onError: ${anError?.errorBody}")
-                        Log.d("rlBanner", "onError: ${anError?.errorDetail}")
-                        Log.d("rlBanner", "onError: ${anError?.errorCode}")
-                    }
+                        override fun onError(anError: ANError?) {
+                            progressDialog.dismiss()
+                            Log.d("rlBanner", "onError: ${anError?.errorBody}")
+                            Log.d("rlBanner", "onError: ${anError?.errorDetail}")
+                            Log.d("rlBanner", "onError: ${anError?.errorCode}")
+                        }
 
-                })
+                    })
     }
 }
