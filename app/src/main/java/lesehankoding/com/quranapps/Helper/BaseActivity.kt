@@ -1,9 +1,5 @@
 package lesehankoding.com.quranapps.Helper
 
-/*
- * Created by Manne Öhlund on 2019-08-10.
- * Copyright (c) All rights reserved.
- */
 
 import android.annotation.SuppressLint
 import android.os.Bundle

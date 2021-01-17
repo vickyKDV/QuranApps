@@ -18,8 +18,8 @@ import kotlinx.android.synthetic.main.activity_ayat.*
 import kotlinx.android.synthetic.main.item_ayat.view.*
 import lesehankoding.com.quranapps.Adapter.AdapterAyat
 import lesehankoding.com.quranapps.Model.*
-import lesehankoding.com.quranapps.Model.ModelAyat.ModelAyat
-import lesehankoding.com.quranapps.Model.ModelAyat.VersesItem
+import lesehankoding.com.quranapps.Model.ModelAyat_v2.*
+import lesehankoding.com.quranapps.Model.ModelAyat_v2.Number
 import lesehankoding.com.quranapps.R
 import lesehankoding.com.quranapps.Utils.Utils
 import okhttp3.Response
@@ -76,9 +76,9 @@ class AyatPage : AppCompatActivity()  {
         AndroidNetworking.get("https://api.quran.sutanlab.id/surah/$number")
             .build()
             .getAsOkHttpResponseAndObject(
-                    ModelAyat::class.java,
-                    object : OkHttpResponseAndParsedRequestListener<ModelAyat> {
-                        override fun onResponse(okHttpResponse: Response?, response: ModelAyat?) {
+                ModelAyatv3::class.java,
+                    object : OkHttpResponseAndParsedRequestListener<ModelAyatv3> {
+                        override fun onResponse(okHttpResponse: Response?, response: ModelAyatv3?) {
                             if (okHttpResponse!!.isSuccessful) {
                                 if (response?.code == 200) {
                                     val list: ArrayList<VersesItem> = ArrayList()
@@ -87,7 +87,7 @@ class AyatPage : AppCompatActivity()  {
                                     val jcAudios = java.util.ArrayList<JcAudio>()
                                     var title: String?
                                     for (i in response.data!!.verses!!.indices) {
-                                        val item = response.data.verses!![i]?.copy()!!
+                                        val item = response.data.verses!![i]!!.copy()
                                         Log.d("rlBanner", "onResponse: ${item.toString()}");
                                         list.add(item)
                                         title =

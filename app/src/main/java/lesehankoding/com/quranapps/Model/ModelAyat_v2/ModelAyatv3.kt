@@ -1,11 +1,11 @@
-package lesehankoding.com.quranapps.Model.ModelAyat
+package lesehankoding.com.quranapps.Model.ModelAyat_v2
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class ModelAyat(
+data class ModelAyatv3(
 
 	@field:SerializedName("code")
 	val code: Int? = null,
@@ -21,58 +21,13 @@ data class ModelAyat(
 ) : Parcelable
 
 @Parcelize
-data class Text(
+data class Sajda(
 
-	@field:SerializedName("transliteration")
-	val transliteration: Transliteration? = null,
+	@field:SerializedName("obligatory")
+	val obligatory: Boolean? = null,
 
-	@field:SerializedName("arab")
-	val arab: String? = null
-) : Parcelable
-
-@Parcelize
-data class Data(
-
-	@field:SerializedName("number")
-	val number: Int? = null,
-
-	@field:SerializedName("sequence")
-	val sequence: Int? = null,
-
-	@field:SerializedName("numberOfVerses")
-	val numberOfVerses: Int? = null,
-
-	@field:SerializedName("revelation")
-	val revelation: Revelation? = null,
-
-	@field:SerializedName("name")
-	val name: Name? = null,
-
-	@field:SerializedName("tafsir")
-	val tafsirSurah: TafsirSurah? = null,
-
-	@field:SerializedName("preBismillah")
-	val preBismillah: PreBismillah? = null,
-
-	@field:SerializedName("verses")
-	val verses: List<VersesItem?>? = null
-) : Parcelable
-
-@Parcelize
-data class Number(
-
-	@field:SerializedName("inQuran")
-	val inQuran: Int? = null,
-
-	@field:SerializedName("inSurah")
-	val inSurah: Int? = null
-) : Parcelable
-
-@Parcelize
-data class TafsirSurah(
-
-	@field:SerializedName("id")
-	val id: String? = null
+	@field:SerializedName("recommended")
+	val recommended: Boolean? = null
 ) : Parcelable
 
 @Parcelize
@@ -91,10 +46,20 @@ data class Meta(
 	val page: Int? = null,
 
 	@field:SerializedName("sajda")
-	val sajda: Boolean? = null,
+	val sajda: Sajda? = null,
 
 	@field:SerializedName("juz")
 	val juz: Int? = null
+) : Parcelable
+
+@Parcelize
+data class Audio(
+
+	@field:SerializedName("secondary")
+	val secondary: List<String?>? = null,
+
+	@field:SerializedName("primary")
+	val primary: String? = null
 ) : Parcelable
 
 @Parcelize
@@ -114,20 +79,23 @@ data class Name(
 ) : Parcelable
 
 @Parcelize
-data class Transliteration(
+data class TafsirAyat(
 
-	@field:SerializedName("en")
-	val en: String? = null
+	@field:SerializedName("id")
+	val id: String? = null
 ) : Parcelable
 
 @Parcelize
-data class Audio(
+data class Revelation(
 
-	@field:SerializedName("secondary")
-	val secondary: List<String?>? = null,
+	@field:SerializedName("en")
+	val en: String? = null,
 
-	@field:SerializedName("primary")
-	val primary: String? = null
+	@field:SerializedName("id")
+	val id: String? = null,
+
+	@field:SerializedName("arab")
+	val arab: String? = null
 ) : Parcelable
 
 @Parcelize
@@ -141,6 +109,13 @@ data class PreBismillah(
 
 	@field:SerializedName("audio")
 	val audio: Audio? = null
+) : Parcelable
+
+@Parcelize
+data class Transliteration(
+
+	@field:SerializedName("en")
+	val en: String? = null
 ) : Parcelable
 
 @Parcelize
@@ -176,16 +151,58 @@ data class VersesItem(
 ) : Parcelable
 
 @Parcelize
-data class Revelation(
+data class Data(
 
-	@field:SerializedName("en")
-	val en: String? = null,
+	@field:SerializedName("number")
+	val number: Int? = null,
 
-	@field:SerializedName("id")
-	val id: String? = null,
+	@field:SerializedName("sequence")
+	val sequence: Int? = null,
+
+	@field:SerializedName("numberOfVerses")
+	val numberOfVerses: Int? = null,
+
+	@field:SerializedName("tafsirAyat")
+	val tafsirAyat: TafsirAyat? = null,
+
+	@field:SerializedName("revelation")
+	val revelation: Revelation? = null,
+
+	@field:SerializedName("name")
+	val name: Name? = null,
+
+	@field:SerializedName("preBismillah")
+	val preBismillah: PreBismillah? = null,
+
+	@field:SerializedName("verses")
+	val verses: List<VersesItem?>? = null
+) : Parcelable
+
+@Parcelize
+data class Number(
+
+	@field:SerializedName("inQuran")
+	val inQuran: Int? = null,
+
+	@field:SerializedName("inSurah")
+	val inSurah: Int? = null
+) : Parcelable
+
+@Parcelize
+data class Text(
+
+	@field:SerializedName("transliteration")
+	val transliteration: Transliteration? = null,
 
 	@field:SerializedName("arab")
 	val arab: String? = null
+) : Parcelable
+
+@Parcelize
+data class Tafsir(
+
+	@field:SerializedName("id")
+	val id: Id? = null
 ) : Parcelable
 
 @Parcelize
@@ -196,11 +213,4 @@ data class Translation(
 
 	@field:SerializedName("id")
 	val id: String? = null
-) : Parcelable
-
-@Parcelize
-data class Tafsir(
-
-	@field:SerializedName("id")
-	val id: Id? = null
 ) : Parcelable
