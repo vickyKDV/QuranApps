@@ -65,29 +65,29 @@ class SurahActivity : AppCompatActivity() {
                     val item = response.data[i]!!.copy()
                     list.add(item)
                 }
-                val adapter = AdapterSurah(list)
-                scrollable_content.adapter = adapter
-                val dividerItemDecoration = DividerItemDecoration(
-                    this@SurahActivity,
-                    DividerItemDecoration.VERTICAL,
-                    false
-                )
-                scrollable_content.addItemDecoration(dividerItemDecoration)
-                scrollable_content.layoutManager = LinearLayoutManager(
-                    this@SurahActivity,
-                    RecyclerView.VERTICAL,
-                    false
-                )
-
-                adapter.SetOnItemClickListener(object : SetOnClickListener<DataItem> {
-                    override fun onClick(view: View, position: Int, dataItem: DataItem) {
-                        val i = Intent(this@SurahActivity, AyatPage::class.java)
-                        i.putExtra("data",list[position])
-                        startActivity(i)
-                    }
-
-                })
-                progressDialog.dismiss()
+//                val adapter = AdapterSurah(list)
+//                scrollable_content.adapter = adapter
+//                val dividerItemDecoration = DividerItemDecoration(
+//                    this@SurahActivity,
+//                    DividerItemDecoration.VERTICAL,
+//                    false
+//                )
+//                scrollable_content.addItemDecoration(dividerItemDecoration)
+//                scrollable_content.layoutManager = LinearLayoutManager(
+//                    this@SurahActivity,
+//                    RecyclerView.VERTICAL,
+//                    false
+//                )
+//
+//                adapter.SetOnItemClickListener(object : SetOnClickListener<DataItem> {
+//                    override fun onClick(view: View, position: Int, dataItem: DataItem) {
+//                        val i = Intent(this@SurahActivity, AyatPage::class.java)
+//                        i.putExtra("data",list[position])
+//                        startActivity(i)
+//                    }
+//
+//                })
+//                progressDialog.dismiss()
             }
 
             override fun onError(anError: ANError?) {

@@ -30,6 +30,7 @@
         </activity>
         <activity android:name=".Ui.AyatPage" />
         <activity android:name=".Ui.SurahActivity" />
+        <activity android:name=".Ui.SurahActivityRxJava" />
     </application>
 
 </manifest>
