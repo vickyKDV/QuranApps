@@ -29,6 +29,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        startActivity(Intent(this@MainActivity,SurahActivity::class.java))
+        finish()
         if (Build.VERSION.SDK_INT in 19..20) {
             setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true)
         }
@@ -39,14 +41,16 @@ class MainActivity : AppCompatActivity() {
             setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
             window.statusBarColor = Color.TRANSPARENT
         }
-        setContentView(R.layout.activity_surah_v2)
 
 
-        getSurahV2()
-
-        Thread {
-            getSurah!!.getSurah("https://api.quran.sutanlab.id/surah")
-        }.start()
+//        setContentView(R.layout.activity_surah_v2)
+//
+//
+//        getSurahV2()
+//
+//        Thread {
+//            getSurah!!.getSurah("https://api.quran.sutanlab.id/surah")
+//        }.start()
 
 
 

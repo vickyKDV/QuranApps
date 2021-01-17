@@ -29,6 +29,7 @@
             <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Ui.AyatPage" />
+        <activity android:name=".Ui.SurahActivity" />
     </application>
 
 </manifest>

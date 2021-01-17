@@ -1,6 +1,7 @@
 package lesehankoding.com.quranapps.Ui
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.androidnetworking.error.ANError
 import kotlinx.android.synthetic.main.activity_surah_v2.*
 import lesehankoding.com.quranapps.Adapter.AdapterSurah
+import lesehankoding.com.quranapps.Interface.SetOnClickListener
 import lesehankoding.com.quranapps.Model.*
 import lesehankoding.com.quranapps.Networking.ApiService
 import lesehankoding.com.quranapps.Networking.CallbackApi
@@ -77,15 +79,14 @@ class SurahActivity : AppCompatActivity() {
                     false
                 )
 
-//                adapter.SetOnItemClickListener(object : SetOnClickListener<DataItem> {
-//                    override fun onClick(view: View, position: Int, dataItem: DataItem) {
-//                        val i = Intent(this@SurahActivity, AyatPage::class.java)
-//                        i.putExtra("data",list[position])
-//                        startActivity(i)
-//                        overridePendingTransition(R.anim.bounce_interpolator, R.anim.decelerate_interpolator)
-//                    }
-//
-//                })
+                adapter.SetOnItemClickListener(object : SetOnClickListener<DataItem> {
+                    override fun onClick(view: View, position: Int, dataItem: DataItem) {
+                        val i = Intent(this@SurahActivity, AyatPage::class.java)
+                        i.putExtra("data",list[position])
+                        startActivity(i)
+                    }
+
+                })
                 progressDialog.dismiss()
             }
 

@@ -56,7 +56,7 @@ class AyatPage : AppCompatActivity()  {
         txtNamaSurahId.text = item.name.transliteration?.id
         txtDiturunkan.text = if(item.revelation?.id == "Makkiyyah") "Diturunkan : Mekkah" else "Diturunkan : Madinah"
         txtTafsir.text = item.tafsir?.id
-        txtTitle.text = item.name.transliteration?.id
+        txtTitle.text = "${item.name.transliteration?.id} - ${item.numberOfVerses} Ayat"
 
         imbBack.setOnClickListener {
             onBackPressed()
@@ -83,8 +83,8 @@ class AyatPage : AppCompatActivity()  {
                                 if (response?.code == 200) {
                                     val list: ArrayList<VersesItem> = ArrayList()
 //                                    val playList: ArrayList<JcAudio> = ArrayList()
-//                                    playList.clear()
-                                    val jcAudios = java.util.ArrayList<JcAudio>()
+                                    val jcAudios = ArrayList<JcAudio>()
+                                    jcAudios.clear()
                                     var title: String?
                                     for (i in response.data!!.verses!!.indices) {
                                         val item = response.data.verses!![i]!!.copy()
@@ -92,7 +92,7 @@ class AyatPage : AppCompatActivity()  {
                                         list.add(item)
                                         title =
                                                 "${response.data.verses[i]?.text?.transliteration?.en} - ${item.translation?.id}"
-                                        val audio = response.data.verses[i]?.audio!!.secondary!![0]!![0]
+                                        val audio = "https://cdn.islamic.network/quran/audio/64/ar.alafasy/${item.number?.inQuran}.mp3"
 //                                                "https://cdn.islamic.network/quran/audio/64/ar.alafasy/${item.number?.inSurah}.mp3"
                                         jcAudios.add(JcAudio.createFromURL(title, "${audio}")
                                         )

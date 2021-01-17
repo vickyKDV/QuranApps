@@ -62,5 +62,6 @@ dependencies {
     implementation files('libs/hxaudio-v331.aar')
     implementation 'com.github.jeancsanchez:JcPlayer:2.6.16'
     implementation 'com.batoulapps.adhan:adhan:1.2.0'
+    implementation 'com.amitshekhar.android:rx2-android-networking:1.0.2'
 
 }
