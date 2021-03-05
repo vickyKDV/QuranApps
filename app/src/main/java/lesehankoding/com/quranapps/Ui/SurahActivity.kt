@@ -86,12 +86,11 @@ class SurahActivity : BaseActivity(){
                     false
             )
         }
-        //Setup OnClickItem
         adapterSurah.setOnActionListener(object : SurahViewHolder.OnActionListener {
             override fun onItemClick(view: SurahViewHolder) {
-                val i = Intent(this@SurahActivity, AyatPage::class.java)
-                i.putExtra("data", listItem[view.adapterPosition])
-                startActivity(i)
+                openActivity<AyatPage> {
+                    putParcelable("data", listItem[view.adapterPosition])
+                }
             }
         })
     }
