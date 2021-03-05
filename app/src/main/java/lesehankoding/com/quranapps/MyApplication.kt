@@ -8,12 +8,7 @@ class MyApplication() : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
         AndroidNetworking.initialize(this@MyApplication)
         AndroidNetworking.enableLogging(); // simply enable logging
-
-
-
-
     }
 }

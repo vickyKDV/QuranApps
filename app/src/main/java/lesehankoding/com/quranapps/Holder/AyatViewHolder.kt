@@ -1,9 +1,8 @@
 package lesehankoding.com.quranapps.Holder
 
 import android.view.View
-import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_ayat.view.*
-import lesehankoding.com.quranapps.Model.ModelAyat_v2.VersesItem
+import lesehankoding.com.quranapps.Model.ModelAyat.VersesItem
 
 class AyatViewHolder(itemView:View) : BaseItemViewHolder<VersesItem>(itemView) {
 

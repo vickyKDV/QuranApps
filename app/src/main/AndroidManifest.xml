@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="lesehankoding.com.quranapps">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -12,25 +14,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuranApps"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".Ui.WaktuShalatPage"></activity>
-        <activity android:name=".Ui.MainActivity">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m">
+        <activity android:name=".Ui.WaktuShalatPage" />
+        <activity android:name=".Ui.SurahActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Ui.DetailPage">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
         <activity android:name=".Ui.AyatPage" />
-        <activity android:name=".Ui.SurahActivity" />
-        <activity android:name=".Ui.SurahActivityRxJava" />
+<!--        <activity android:name=".Ui.SurahActivity" />-->
     </application>
 
 </manifest>

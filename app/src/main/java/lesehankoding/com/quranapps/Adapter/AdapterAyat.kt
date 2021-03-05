@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_ayat.view.*
-import lesehankoding.com.quranapps.Model.ModelAyat_v2.VersesItem
+import lesehankoding.com.quranapps.Model.ModelAyat.VersesItem
 import lesehankoding.com.quranapps.R
 
 class AdapterAyat(private val list: ArrayList<VersesItem>) : RecyclerView.Adapter<AdapterAyat.MyHolder>() {

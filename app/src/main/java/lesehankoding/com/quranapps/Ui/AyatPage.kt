@@ -10,42 +10,64 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.androidnetworking.AndroidNetworking
-import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.OkHttpResponseAndParsedRequestListener
 import com.example.jean.jcplayer.model.JcAudio
+import com.lesehankoding.rumahmadani.PlanerPage.wrapper_api.wrapper.Wrapper
 import kotlinx.android.synthetic.main.activity_ayat.*
 import kotlinx.android.synthetic.main.item_ayat.view.*
 import lesehankoding.com.quranapps.Adapter.AdapterAyat
+import lesehankoding.com.quranapps.Base.BaseActivity
 import lesehankoding.com.quranapps.Model.*
-import lesehankoding.com.quranapps.Model.ModelAyat_v2.*
-import lesehankoding.com.quranapps.Model.ModelAyat_v2.Number
+import lesehankoding.com.quranapps.Model.ModelAyat.*
 import lesehankoding.com.quranapps.R
 import lesehankoding.com.quranapps.Utils.Utils
-import okhttp3.Response
+import lesehankoding.com.quranapps.databinding.ActivityAyatBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class AyatPage : AppCompatActivity()  {
+class AyatPage : BaseActivity()  {
 
-//    var itemPlayer : ArrayList<HXMusicItem> = ArrayList()
-//    var hxMusic = HXMusic.instance()
+    private lateinit var binding: ActivityAyatBinding
+    override fun setLayout(): View {
+        binding = ActivityAyatBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+    override fun onCreateActivity(savedInstanceState: Bundle?) {
+        setupUI()
+    }
+
+    override fun onDestroyActivity() {
+
+    }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT in 19..20) {
-            Utils.setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true)
-        }
-        if (Build.VERSION.SDK_INT >= 19) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        }
-        if (Build.VERSION.SDK_INT >= 21) {
-            Utils.setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
-            window.statusBarColor = Color.TRANSPARENT
-        }
-        setContentView(R.layout.activity_ayat)
+    private fun getSurah(numberOfSurah: String){
+
+        isConnectionReady(
+            onReady = {
+                Wrapper.getAyat(
+                    numberOfSurah = numberOfSurah,
+                    onLoading = {
+                        showProgressAnim(label = "Load data...")
+                    },
+                    onSuccess = {
+                        setupData(it)
+                        hideProgressAnim()
+                    },
+                    onError = {code:Int,message:String ->
+                        hideProgressAnim()
+                    }
+                )
+            },
+            onRefresh = {
+                getSurah(numberOfSurah)
+            }
+        )
+
+    }
+
+    private fun setupUI(){
         val item: DataItem = intent?.getParcelableExtra("data")!!
 
         Log.d("NetworkAcitivty", "onCreate: ${item.tafsir}")
@@ -62,110 +84,72 @@ class AyatPage : AppCompatActivity()  {
             onBackPressed()
         }
 
+        getSurah(item.number.toString())
+    }
 
-    getSurah(item.number.toString())
+    private fun setupData(model:ModelAyatv3){
+        model.apply {
+            if (code == 200) {
+                val list: ArrayList<VersesItem> = ArrayList()
+                val jcAudios = ArrayList<JcAudio>()
+                jcAudios.clear()
+                var title: String?
+                for (i in data!!.verses!!.indices) {
+                    val item = data.verses!![i]!!.copy()
+                    Log.d("rlBanner", "onResponse: ${item.toString()}");
+                    list.add(item)
+                    title =
+                        "${data.verses[i]?.text?.transliteration?.en} - ${item.translation?.id}"
+                    val audio = "https://cdn.islamic.network/quran/audio/64/ar.alafasy/${item.number?.inQuran}.mp3"
+                    jcAudios.add(JcAudio.createFromURL(title, "${audio}"))
+                }
+
+                jcplayer.initPlaylist(jcAudios)
+                setupAdapter(list = list)
+
+            }
+        }
+    }
+
+    private fun setupAdapter(list: ArrayList<VersesItem> = ArrayList()){
+        val adapter = AdapterAyat(list)
+        scrollable_content.adapter = adapter
+        scrollable_content.layoutManager = LinearLayoutManager(this@AyatPage, RecyclerView.VERTICAL, false)
+        adapter.apply {
+            adapter.SetOnItemClickListener(object :
+                AdapterAyat.SetOnClickListener<VersesItem> {
+                override fun onShare(
+                    view: View,
+                    position: Int,
+                    dataItem: VersesItem
+                ) {
+                    Log.d("rlBanner", "onClick: Share");
+                }
+
+                override fun onPlay(
+                    view: View,
+                    position: Int,
+                    dataItem: VersesItem
+                ) {
+                    jcplayer.playAudio(jcplayer.myPlaylist!![position])
+                }
+
+                override fun onBookMark(
+                    view: View,
+                    position: Int,
+                    dataItem: VersesItem
+                ) {
+                    Log.d(
+                        "AYATPAGE",
+                        "onClick: ${dataItem.number?.inSurah}"
+                    );
+                }
+
+            })
+        }
     }
 
 
 
 
-    private fun getSurah(number: String){
-        var progressDialog = ProgressDialog(this)
-        progressDialog.setTitle("Loading")
-        progressDialog.show()
-        AndroidNetworking.get("https://api.quran.sutanlab.id/surah/$number")
-            .build()
-            .getAsOkHttpResponseAndObject(
-                ModelAyatv3::class.java,
-                    object : OkHttpResponseAndParsedRequestListener<ModelAyatv3> {
-                        override fun onResponse(okHttpResponse: Response?, response: ModelAyatv3?) {
-                            if (okHttpResponse!!.isSuccessful) {
-                                if (response?.code == 200) {
-                                    val list: ArrayList<VersesItem> = ArrayList()
-//                                    val playList: ArrayList<JcAudio> = ArrayList()
-                                    val jcAudios = ArrayList<JcAudio>()
-                                    jcAudios.clear()
-                                    var title: String?
-                                    for (i in response.data!!.verses!!.indices) {
-                                        val item = response.data.verses!![i]!!.copy()
-                                        Log.d("rlBanner", "onResponse: ${item.toString()}");
-                                        list.add(item)
-                                        title =
-                                                "${response.data.verses[i]?.text?.transliteration?.en} - ${item.translation?.id}"
-                                        val audio = "https://cdn.islamic.network/quran/audio/64/ar.alafasy/${item.number?.inQuran}.mp3"
-//                                                "https://cdn.islamic.network/quran/audio/64/ar.alafasy/${item.number?.inSurah}.mp3"
-                                        jcAudios.add(JcAudio.createFromURL(title, "${audio}")
-                                        )
-                                    }
-
-                                    jcplayer.initPlaylist(jcAudios)
-
-
-                                    val adapter = AdapterAyat(list)
-                                    scrollable_content.adapter = adapter
-                                    scrollable_content.layoutManager = LinearLayoutManager(
-                                            this@AyatPage,
-                                            RecyclerView.VERTICAL,
-                                            false
-                                    )
-
-                                    adapter.apply {
-                                        adapter.SetOnItemClickListener(object :
-                                                AdapterAyat.SetOnClickListener<VersesItem> {
-                                            override fun onShare(
-                                                    view: View,
-                                                    position: Int,
-                                                    dataItem: VersesItem
-                                            ) {
-                                                Log.d("rlBanner", "onClick: Share");
-                                            }
-
-                                            override fun onPlay(
-                                                    view: View,
-                                                    position: Int,
-                                                    dataItem: VersesItem
-                                            ) {
-//                                                Log.d(
-//                                                        "rlBanner",
-//                                                        "onClick: ${dataItem.audio?.primary}"
-//                                                );
-
-//                                            jcplayer.createNotification(R.drawable.ic_quran)
-                                                jcplayer.playAudio(jcplayer.myPlaylist!![position])
-//                                                Utils.PlayQuran(this@AyatPage, dataItem.audio?.primary!!)
-//                                                HXMusic.music().play(this@AyatPage)
-
-                                            }
-
-                                            override fun onBookMark(
-                                                    view: View,
-                                                    position: Int,
-                                                    dataItem: VersesItem
-                                            ) {
-                                                Log.d(
-                                                        "rlBanner",
-                                                        "onClick: ${dataItem.number?.inSurah}"
-                                                );
-                                            }
-
-                                        })
-                                    }
-
-
-                                }
-                                progressDialog.dismiss()
-                            } else {
-                                progressDialog.dismiss()
-                            }
-                        }
-
-                        override fun onError(anError: ANError?) {
-                            progressDialog.dismiss()
-                            Log.d("rlBanner", "onError: ${anError?.errorBody}")
-                            Log.d("rlBanner", "onError: ${anError?.errorDetail}")
-                            Log.d("rlBanner", "onError: ${anError?.errorCode}")
-                        }
-
-                    })
-    }
 }

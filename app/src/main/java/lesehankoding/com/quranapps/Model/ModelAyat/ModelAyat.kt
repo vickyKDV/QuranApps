@@ -1,4 +1,4 @@
-package lesehankoding.com.quranapps.Model.ModelAyat_v2
+package lesehankoding.com.quranapps.Model.ModelAyat
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
