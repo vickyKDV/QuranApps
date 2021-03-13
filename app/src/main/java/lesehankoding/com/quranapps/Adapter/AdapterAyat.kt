@@ -5,12 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_ayat.view.*
+import lesehankoding.com.quranapps.DB.Ayat
 import lesehankoding.com.quranapps.Model.ModelAyat.VersesItem
 import lesehankoding.com.quranapps.R
 
-class AdapterAyat(private val list: ArrayList<VersesItem>) : RecyclerView.Adapter<AdapterAyat.MyHolder>() {
+class AdapterAyat(private val list: ArrayList<Ayat>) : RecyclerView.Adapter<AdapterAyat.MyHolder>() {
 
-    private var onClick: SetOnClickListener<VersesItem>? = null
+    private var onClick: SetOnClickListener<Ayat>? = null
 
     interface SetOnClickListener<T> {
         fun onShare(view: View, position: Int, dataItem: T)
@@ -18,19 +19,19 @@ class AdapterAyat(private val list: ArrayList<VersesItem>) : RecyclerView.Adapte
         fun onBookMark(view: View, position: Int, dataItem: T)
     }
 
-    fun SetOnItemClickListener(onclick: SetOnClickListener<VersesItem>) {
+    fun SetOnItemClickListener(onclick: SetOnClickListener<Ayat>) {
         this.onClick = onclick
     }
 
 
     inner class MyHolder(itemview:View) : RecyclerView.ViewHolder(itemview) {
 
-        fun bind(item: VersesItem){
+        fun bind(item: Ayat){
             with(itemView){
-                txtAyatAr.text = item.text?.arab
-                txtAyatId.text = item.text?.transliteration?.en
-                txtNumber.text = item.number?.inSurah.toString()
-                txtArti.text = item.translation?.id
+                txtAyatAr.text = item.arab
+                txtAyatId.text = item.latin
+                txtNumber.text = item.numberInSurah.toString()
+                txtArti.text = "${item.arti} \n ${item.tafsirAyat}"
 
                 imgShare.setOnClickListener { onClick!!.onShare(imgShare, adapterPosition, list[adapterPosition])  }
                 imgPlay.setOnClickListener { onClick!!.onPlay(imgPlay, adapterPosition, list[adapterPosition])  }

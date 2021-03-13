@@ -4,7 +4,7 @@ import com.lesehankoding.rumahmadani.PlanerPage.wrapper_api.api.ApiService
 import com.rx2androidnetworking.Rx2AndroidNetworking
 import io.reactivex.Flowable
 import lesehankoding.com.quranapps.Model.ModelAyat.ModelAyatv3
-import lesehankoding.com.quranapps.Model.ModelSurah
+import lesehankoding.com.quranapps.Model.ModelSurah.ModelSurah
 import lesehankoding.com.quranapps.Networking.BaseURL
 
 class Repository: ApiService {

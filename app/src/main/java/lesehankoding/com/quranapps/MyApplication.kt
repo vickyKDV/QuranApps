@@ -2,13 +2,27 @@ package lesehankoding.com.quranapps
 
 import android.app.Application
 import com.androidnetworking.AndroidNetworking
-import com.huhx0015.hxaudio.audio.HXMusic
+import io.realm.Realm
+import io.realm.RealmConfiguration
 
-class MyApplication() : Application() {
+
+class MyApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        AndroidNetworking.initialize(this@MyApplication)
+        AndroidNetworking.initialize(this)
         AndroidNetworking.enableLogging(); // simply enable logging
+
+        // Get a Realm instance for this thread
+        Realm.init(applicationContext)
+        val config = RealmConfiguration.Builder()
+            .name("quranDb.realm")
+            .schemaVersion(1)
+            .allowWritesOnUiThread(true)
+            .allowQueriesOnUiThread(true)
+            .deleteRealmIfMigrationNeeded()
+            .build()
+        Realm.setDefaultConfiguration(config)
+
     }
 }

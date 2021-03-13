@@ -1,16 +1,12 @@
 package lesehankoding.com.quranapps.Adapter
 
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_surah.view.*
+import lesehankoding.com.quranapps.DB.Surah
 import lesehankoding.com.quranapps.Holder.SurahViewHolder
-import lesehankoding.com.quranapps.Interface.SetOnClickListener
-import lesehankoding.com.quranapps.Model.DataItem
+import lesehankoding.com.quranapps.Model.ModelSurah.DataItem
 import lesehankoding.com.quranapps.R
 
-class AdapterSurah:BaseRecyclerAdapter<DataItem,SurahViewHolder>() {
+class AdapterSurah:BaseRecyclerAdapter<Surah,SurahViewHolder>() {
 
     private lateinit var actionListener: SurahViewHolder.OnActionListener
 

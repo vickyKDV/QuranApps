@@ -6,7 +6,7 @@ import com.lesehankoding.rumahmadani.PlanerPage.wrapper_api.utils.ErrorHanlder
 import com.lesehankoding.rumahmadani.PlanerPage.wrapper_api.utils.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 import lesehankoding.com.quranapps.Model.ModelAyat.ModelAyatv3
-import lesehankoding.com.quranapps.Model.ModelSurah
+import lesehankoding.com.quranapps.Model.ModelSurah.ModelSurah
 
 object Wrapper {
 
@@ -27,7 +27,7 @@ object Wrapper {
     fun getSurah(
         onLoading: (() -> Unit),
         onSuccess: ((ModelSurah) -> Unit),
-        onError: ((Int, String) -> Unit)
+        onError: ((String) -> Unit)
     ){
         onLoading()
         compositeDisposable.add(
@@ -35,7 +35,7 @@ object Wrapper {
                 .compose(schedulerProvider.ioToMainFlowableScheduler())
                 .subscribe (
                     { resultData -> onSuccess(resultData) },
-                    {throwable -> ErrorHanlder.errorHandle(throwable as ANError, onError)}
+                    {throwable -> ErrorHanlder.errorHandle(throwable as ANError,onError)}
                 )
         )
 
@@ -46,7 +46,7 @@ object Wrapper {
         numberOfSurah:String,
         onLoading: (() -> Unit),
         onSuccess: ((ModelAyatv3) -> Unit),
-        onError: ((Int, String) -> Unit)
+        onError: (( String) -> Unit)
     ){
         onLoading()
         compositeDisposable.add(

@@ -1,9 +1,7 @@
 package lesehankoding.com.quranapps.Base
 
-import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -108,7 +106,7 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     inline fun <reified T : Activity> Context.openActivity(
         isFinished: Boolean = false,
-        extras: Bundle.() -> Unit = { },
+        extras: Bundle.() -> Unit = { }
     ) {
         val intent = Intent(this, T::class.java)
         intent.putExtras(Bundle().apply(extras))
@@ -207,7 +205,7 @@ abstract class BaseActivity : AppCompatActivity() {
     fun showProgressAnim(
         label: String = "Mohon tunggu",
         message: String = "",
-        cancelable: Boolean = false,
+        cancelable: Boolean = false
     ){
         if(!isFinishing){
             if(hud?.isShowing == false){
@@ -254,7 +252,7 @@ abstract class BaseActivity : AppCompatActivity() {
      * @param onRefresh
      */
     private fun showDialogErrorInternet(
-        refreshClick: (() -> Unit)? = null,
+        refreshClick: (() -> Unit)? = null
     ){
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
         val binding : BottomDlgNointernetBinding = BottomDlgNointernetBinding.inflate(layoutInflater)
@@ -282,7 +280,7 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     fun isConnectionReady(
         onReady: () -> Unit,
-        onRefresh: (() -> Unit)? = null,
+        onRefresh: (() -> Unit)? = null
     ){
         if(isInternetAvailable()){
             Log.d("TAG", "isConnectionReady: Inet Ready!!")
@@ -334,7 +332,7 @@ abstract class BaseActivity : AppCompatActivity() {
     fun showDialogError(
         titleError : String,
         deskripsiError : String,
-        refreshClick: (() -> Unit)? = null,
+        refreshClick: (() -> Unit)? = null
     ){
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
         val binding : BottomDlgNointernetBinding = BottomDlgNointernetBinding.inflate(layoutInflater)
@@ -359,7 +357,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun showError(
         anError: Throwable,
-        refreshClick: (() -> Unit)? = null,
+        refreshClick: (() -> Unit)? = null
     ) {
         hideProgressAnim()
         when (anError) {

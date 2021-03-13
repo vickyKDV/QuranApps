@@ -1,8 +1,17 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-android-extensions'
-}
+//plugins {
+//    id 'com.android.application'
+//    id 'kotlin-android'
+//    id 'kotlin-android-extensions'
+//    id 'kotlin-kapt'
+//    id 'realm-android'
+//
+//}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 30
@@ -36,6 +45,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+//    realm {
+//        syncEnabled = true
+//    }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }

@@ -1,10 +1,12 @@
-package lesehankoding.com.quranapps.Model
+package lesehankoding.com.quranapps.Model.ModelSurah
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import io.realm.RealmList
+import io.realm.RealmModel
+import io.realm.RealmObject
 import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 data class ModelSurah(
 
 	@field:SerializedName("code")
@@ -18,16 +20,45 @@ data class ModelSurah(
 
 	@field:SerializedName("status")
 	val status: String? = null
-) : Parcelable
+)
 
-@Parcelize
+
+data class Revelation(
+
+	@field:SerializedName("en")
+	val en: String? = null,
+
+	@field:SerializedName("id")
+	val id: String? = null,
+
+	@field:SerializedName("arab")
+	val arab: String? = null
+)
+
+
+data class Name(
+
+	@field:SerializedName("translation")
+	val translation: Translation? = null,
+
+	@field:SerializedName("short")
+	val jsonMemberShort: String? = null,
+
+	@field:SerializedName("long")
+	val jsonMemberLong: String? = null,
+
+	@field:SerializedName("transliteration")
+	val transliteration: Transliteration? = null
+)
+
+
 data class Tafsir(
 
 	@field:SerializedName("id")
 	val id: String? = null
-) : Parcelable
+)
 
-@Parcelize
+
 data class DataItem(
 
 	@field:SerializedName("number")
@@ -47,38 +78,9 @@ data class DataItem(
 
 	@field:SerializedName("tafsir")
 	val tafsir: Tafsir? = null
-) : Parcelable
+)
 
-@Parcelize
-data class Name(
 
-	@field:SerializedName("translation")
-	val translation: Translation? = null,
-
-	@field:SerializedName("short")
-	val jsonMemberShort: String? = null,
-
-	@field:SerializedName("long")
-	val jsonMemberLong: String? = null,
-
-	@field:SerializedName("transliteration")
-	val transliteration: Transliteration? = null
-) : Parcelable
-
-@Parcelize
-data class Revelation(
-
-	@field:SerializedName("en")
-	val en: String? = null,
-
-	@field:SerializedName("id")
-	val id: String? = null,
-
-	@field:SerializedName("arab")
-	val arab: String? = null
-) : Parcelable
-
-@Parcelize
 data class Translation(
 
 	@field:SerializedName("en")
@@ -86,9 +88,9 @@ data class Translation(
 
 	@field:SerializedName("id")
 	val id: String? = null
-) : Parcelable
+)
 
-@Parcelize
+
 data class Transliteration(
 
 	@field:SerializedName("en")
@@ -96,4 +98,4 @@ data class Transliteration(
 
 	@field:SerializedName("id")
 	val id: String? = null
-) : Parcelable
+)

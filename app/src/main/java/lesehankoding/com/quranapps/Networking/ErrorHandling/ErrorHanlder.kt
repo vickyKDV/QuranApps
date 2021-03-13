@@ -9,8 +9,9 @@ object ErrorHanlder {
 
     fun errorHandle(
             anError: ANError,
-            onError: ((Int, String) -> Unit),
+            onError: ((String) -> Unit)
     ) {
-        onError(anError.errorCode, anError.errorDetail)
+        onError(anError.errorDetail)
     }
+
 }
