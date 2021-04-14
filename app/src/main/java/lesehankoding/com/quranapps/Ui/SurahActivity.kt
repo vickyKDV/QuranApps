@@ -47,12 +47,8 @@ class SurahActivity : BaseActivity(){
                     Wrapper.getSurah(
                         onLoading = {
                             showProgressAnim(label = "Load data...")
-
                         },
                         onSuccess = {
-//                        realmHelper.addSurah(realm, it)
-//                        Log.d("binding", "getData: ${realmHelper.getSurah(realm)}");
-
                             setupData(it)
                             hideProgressAnim()
 

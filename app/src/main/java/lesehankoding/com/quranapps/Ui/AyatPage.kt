@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jean.jcplayer.model.JcAudio
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.lesehankoding.rumahmadani.PlanerPage.wrapper_api.wrapper.Wrapper
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_ayat.*
@@ -24,7 +26,10 @@ import lesehankoding.com.quranapps.Model.ModelAyat.*
 import lesehankoding.com.quranapps.Model.ModelSurah.DataItem
 import lesehankoding.com.quranapps.R
 import lesehankoding.com.quranapps.Utils.Utils
+import lesehankoding.com.quranapps.Utils.makeTextViewResizable
 import lesehankoding.com.quranapps.databinding.ActivityAyatBinding
+import lesehankoding.com.quranapps.databinding.BottomsheetTafsirAyatBinding
+import lesehankoding.com.quranapps.databinding.BottomsheetTafsirBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -99,7 +104,24 @@ class AyatPage : BaseActivity()  {
         txtNamaSurahId.text = intent.getStringExtra("namaSurah")
         txtDiturunkan.text = if(intent.getStringExtra("diturunkan") == "Makkiyyah") "Diturunkan : Mekkah" else "Diturunkan : Madinah"
         txtTafsir.text =  intent.getStringExtra("tafsir")
+        makeTextViewResizable(txtTafsir, 10, "selengkapnya") {
+//            Log.d("binding", "setupUI: Yes Clicked")
+//            dialogTafsir(
+//                intent.getStringExtra("namaSurah").toString(),
+//                intent.getStringExtra("arti").toString(),
+//                intent.getStringExtra("tafsir").toString())
+        }
+
+        txtTafsir.setOnClickListener {
+            dialogTafsir(
+                intent.getStringExtra("namaSurah").toString(),
+                intent.getStringExtra("arti").toString(),
+                intent.getStringExtra("tafsir").toString())
+        }
+
         txtTitle.text = intent.getStringExtra("title")
+
+
 
         imbBack.setOnClickListener {
             onBackPressed()
@@ -107,6 +129,7 @@ class AyatPage : BaseActivity()  {
 
         getSurah(intent.getStringExtra("id")!!)
     }
+
 
     private fun setupData(model:ModelAyatv3,idSurah:Int){
         model.apply {
@@ -130,15 +153,11 @@ class AyatPage : BaseActivity()  {
                     ayat.juz = item.meta?.juz
                     ayat.audio = "https://cdn.islamic.network/quran/audio/64/ar.alafasy/${item.number?.inQuran}.mp3"
                     realmHelper.addAyat(realm,ayat)
-
-                    Log.d("rlBanner", "onResponse: ${item.toString()}");
-//                    list.add(item)
-                    title =
-                        "${data.verses[i]?.text?.transliteration?.en} - ${item.translation?.id}"
+                    Log.d("rlBanner", "onResponse: $item")
+                    title = "${data.verses[i]?.text?.transliteration?.en} - ${item.translation?.id}"
                     val audio = "https://cdn.islamic.network/quran/audio/64/ar.alafasy/${item.number?.inQuran}.mp3"
                     jcAudios.add(JcAudio.createFromURL(title, "${audio}"))
                 }
-
                 jcplayer.initPlaylist(jcAudios)
                 val listAyat : ArrayList<Ayat> = ArrayList()
                 listAyat.addAll(realmHelper.getAyat(realm,idSurah))
@@ -159,10 +178,7 @@ class AyatPage : BaseActivity()  {
                     view: View,
                     position: Int,
                     dataItem: Ayat
-                ) {
-                    Log.d("rlBanner", "onClick: Share");
-                }
-
+                ){ Log.d("rlBanner", "onClick: Share"); }
                 override fun onPlay(
                     view: View,
                     position: Int,
@@ -182,10 +198,60 @@ class AyatPage : BaseActivity()  {
                     );
                 }
 
+                override fun onClickTafsir(view: View, position: Int, dataItem: Ayat) {
+                    dialogTafsirAyat(dataItem.arab.toString(),dataItem.latin.toString(),"Arti : \n${dataItem.arti} \n\n\nTafsir : \n${dataItem.tafsirAyat}")
+                }
+
             })
         }
     }
 
+    private fun dialogTafsirAyat(ayat:String,arti:String,tafsir: String) {
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
+        val binding: BottomsheetTafsirAyatBinding = BottomsheetTafsirAyatBinding.inflate(
+            layoutInflater)
+
+        binding.apply {
+            txtTafsir.text = tafsir
+            txtAyat.text = ayat
+            txtArti.text = arti
+        }
+
+        bottomSheetDialog.behavior.skipCollapsed = false
+        bottomSheetDialog.setContentView(binding.root)
+        bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetDialog.behavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                    bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+            }
+
+        })
+        bottomSheetDialog.show()
+        Utils.setWhiteNavigationBar(bottomSheetDialog)
+    }
+
+    private fun dialogTafsir(title:String,subTitle:String,tafsir: String) {
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
+        val binding: BottomsheetTafsirBinding = BottomsheetTafsirBinding.inflate(
+            layoutInflater)
+
+        binding.apply {
+            txtDeskripsi.text = tafsir
+            txtTitle.text = title
+            txtArti2.text = subTitle
+        }
+
+        bottomSheetDialog.setContentView(binding.root)
+        bottomSheetDialog.show()
+        Utils.setWhiteNavigationBar(bottomSheetDialog)
+    }
 
 
 
