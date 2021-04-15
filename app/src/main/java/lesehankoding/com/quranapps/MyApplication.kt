@@ -2,6 +2,7 @@ package lesehankoding.com.quranapps
 
 import android.app.Application
 import com.androidnetworking.AndroidNetworking
+import com.pixplicity.easyprefs.library.Prefs
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
@@ -23,6 +24,14 @@ class MyApplication: Application() {
             .deleteRealmIfMigrationNeeded()
             .build()
         Realm.setDefaultConfiguration(config)
+
+
+        Prefs.Builder()
+            .setContext(this)
+            .setMode(MODE_PRIVATE)
+            .setPrefsName(packageName)
+            .setUseDefaultSharedPreference(true)
+            .build()
 
     }
 }

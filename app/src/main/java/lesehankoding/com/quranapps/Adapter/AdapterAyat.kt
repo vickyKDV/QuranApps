@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_ayat.*
+import kotlinx.android.synthetic.main.bottomsheet_tafsir_ayat.view.*
 import kotlinx.android.synthetic.main.item_ayat.view.*
+import kotlinx.android.synthetic.main.item_ayat.view.txtArti
 import lesehankoding.com.quranapps.DB.Ayat
 import lesehankoding.com.quranapps.Model.ModelAyat.VersesItem
 import lesehankoding.com.quranapps.R
@@ -42,6 +44,7 @@ class AdapterAyat(private val list: ArrayList<Ayat>) : RecyclerView.Adapter<Adap
                 imgPlay.setOnClickListener { onClick!!.onPlay(imgPlay, adapterPosition, list[adapterPosition])  }
                 imgBookmark.setOnClickListener { onClick!!.onBookMark(imgBookmark, adapterPosition, list[adapterPosition])  }
                 txtArti.setOnClickListener { onClick!!.onClickTafsir(imgBookmark, adapterPosition, list[adapterPosition])  }
+                txtSelengkapnya.setOnClickListener { onClick!!.onClickTafsir(txtSelengkapnya, adapterPosition, list[adapterPosition])  }
 
 //                makeTextViewResizable(txtArti, 10, "selengkapnya") {
 //                }
@@ -63,6 +66,7 @@ class AdapterAyat(private val list: ArrayList<Ayat>) : RecyclerView.Adapter<Adap
         return MyHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_ayat,parent,false))
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
         holder.bind(list[position])
 //        holder.itemView.txtAyatAr.text = list[position].arab
@@ -73,8 +77,15 @@ class AdapterAyat(private val list: ArrayList<Ayat>) : RecyclerView.Adapter<Adap
 //        holder.itemView.imgShare.setOnClickListener { onClick!!.onShare(holder.itemView.imgShare, position, list[position])  }
 //        holder.itemView.imgPlay.setOnClickListener { onClick!!.onPlay(holder.itemView.imgPlay, position, list[position])  }
 //        holder.itemView.imgBookmark.setOnClickListener { onClick!!.onBookMark(holder.itemView.imgBookmark, position, list[position])  }
+//        holder.itemView.txtSelengkapnya.setOnClickListener { onClick!!.onClickTafsir(holder.itemView.imgBookmark, position, list[position])  }
 //        holder.itemView.txtArti.setOnClickListener { onClick!!.onClickTafsir(holder.itemView.imgBookmark, position, list[position])  }
-//
+
+//        if(holder.itemView.txtArti.length() > 350){
+//            holder.itemView.txtSelengkapnya.visibility  = View.VISIBLE
+//        }else{
+//            holder.itemView.txtSelengkapnya.visibility = View.GONE
+//        }
+
 //        makeTextViewResizable(holder.itemView.txtArti, 10, "selengkapnya") {
 //        }
     }

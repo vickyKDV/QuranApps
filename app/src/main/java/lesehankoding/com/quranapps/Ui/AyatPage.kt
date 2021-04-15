@@ -1,19 +1,19 @@
 package lesehankoding.com.quranapps.Ui
 
-import android.app.ProgressDialog
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.jean.jcplayer.JcPlayerManagerListener
+import com.example.jean.jcplayer.general.JcStatus
 import com.example.jean.jcplayer.model.JcAudio
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.lesehankoding.rumahmadani.PlanerPage.wrapper_api.wrapper.Wrapper
+import com.pixplicity.easyprefs.library.Prefs
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_ayat.*
 import kotlinx.android.synthetic.main.item_ayat.view.*
@@ -23,8 +23,8 @@ import lesehankoding.com.quranapps.DB.Ayat
 import lesehankoding.com.quranapps.DB.RealmHelper
 import lesehankoding.com.quranapps.Model.*
 import lesehankoding.com.quranapps.Model.ModelAyat.*
-import lesehankoding.com.quranapps.Model.ModelSurah.DataItem
 import lesehankoding.com.quranapps.R
+import lesehankoding.com.quranapps.Utils.Constans
 import lesehankoding.com.quranapps.Utils.Utils
 import lesehankoding.com.quranapps.Utils.makeTextViewResizable
 import lesehankoding.com.quranapps.databinding.ActivityAyatBinding
@@ -34,7 +34,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class AyatPage : BaseActivity()  {
+class AyatPage : BaseActivity(), JcPlayerManagerListener {
 
     private lateinit var binding: ActivityAyatBinding
     var realmHelper = RealmHelper()
@@ -53,10 +53,21 @@ class AyatPage : BaseActivity()  {
 
     }
 
+    override fun onDestroy() {
+        setResult(RESULT_OK)
+        super.onDestroy()
+
+    }
+
+    override fun onBackPressed() {
+        setResult(RESULT_OK)
+        super.onBackPressed()
+    }
+
 
     private fun getSurah(numberOfSurah: String){
         val listAyat : ArrayList<Ayat> = ArrayList()
-        listAyat.addAll(realmHelper.getAyat(realm,numberOfSurah.toInt()))
+        listAyat.addAll(realmHelper.getAyat(realm, numberOfSurah.toInt()))
         if(listAyat.isNotEmpty()) {
             Log.d("binding", "getSurah: Ayat is ready!!");
             setupAdapter(list = listAyat)
@@ -88,35 +99,20 @@ class AyatPage : BaseActivity()  {
     }
 
     private fun setupUI(){
-//        val item: DataItem = intent?.getParcelableExtra("data")!!
-
-//        putString("id", listItem[view.adapterPosition]?.id.toString())
-//        putString("namaSurah", listItem[view.adapterPosition]?.surahNameID)
-//        putString("arti", listItem[view.adapterPosition]?.surahArti.toString())
-//        putString("diturunkan", listItem[view.adapterPosition]?.surahDiturunkan.toString())
-//        putString("tafsir", listItem[view.adapterPosition]?.tafsirSurah.toString())
-//        putString("title", listItem[view.adapterPosition]?.surahNameID.toString()+" - "+listItem[view.adapterPosition]?.jumlahSurah.toString())
-
-
         txtArti.text = intent.getStringExtra("arti")
-
-
         txtNamaSurahId.text = intent.getStringExtra("namaSurah")
         txtDiturunkan.text = if(intent.getStringExtra("diturunkan") == "Makkiyyah") "Diturunkan : Mekkah" else "Diturunkan : Madinah"
         txtTafsir.text =  intent.getStringExtra("tafsir")
         makeTextViewResizable(txtTafsir, 10, "selengkapnya") {
-//            Log.d("binding", "setupUI: Yes Clicked")
-//            dialogTafsir(
-//                intent.getStringExtra("namaSurah").toString(),
-//                intent.getStringExtra("arti").toString(),
-//                intent.getStringExtra("tafsir").toString())
+
         }
 
         txtTafsir.setOnClickListener {
             dialogTafsir(
                 intent.getStringExtra("namaSurah").toString(),
                 intent.getStringExtra("arti").toString(),
-                intent.getStringExtra("tafsir").toString())
+                intent.getStringExtra("tafsir").toString()
+            )
         }
 
         txtTitle.text = intent.getStringExtra("title")
@@ -128,16 +124,18 @@ class AyatPage : BaseActivity()  {
         }
 
         getSurah(intent.getStringExtra("id")!!)
+
+        jcplayer.jcPlayerManagerListener = this@AyatPage
     }
 
 
-    private fun setupData(model:ModelAyatv3,idSurah:Int){
+    private fun setupData(model: ModelAyatv3, idSurah: Int){
         model.apply {
             if (code == 200) {
 //                val list: ArrayList<VersesItem> = ArrayList()
-                val jcAudios = ArrayList<JcAudio>()
-                jcAudios.clear()
-                var title: String?
+//                val jcAudios = ArrayList<JcAudio>()
+//                jcAudios.clear()
+//                var title: String?
                 for (i in data!!.verses!!.indices) {
                     val item = data.verses!![i]!!.copy()
                     val ayat = Ayat()
@@ -152,16 +150,18 @@ class AyatPage : BaseActivity()  {
                     ayat.arti = item.tafsir?.id?.jsonMemberShort
                     ayat.juz = item.meta?.juz
                     ayat.audio = "https://cdn.islamic.network/quran/audio/64/ar.alafasy/${item.number?.inQuran}.mp3"
-                    realmHelper.addAyat(realm,ayat)
+                    realmHelper.addAyat(realm, ayat)
                     Log.d("rlBanner", "onResponse: $item")
-                    title = "${data.verses[i]?.text?.transliteration?.en} - ${item.translation?.id}"
-                    val audio = "https://cdn.islamic.network/quran/audio/64/ar.alafasy/${item.number?.inQuran}.mp3"
-                    jcAudios.add(JcAudio.createFromURL(title, "${audio}"))
+//                    title = "${data.verses[i]?.text?.transliteration?.en} - ${item.translation?.id}"
+//                    val audio = "https://cdn.islamic.network/quran/audio/64/ar.alafasy/${item.number?.inQuran}.mp3"
+//                    jcAudios.add(JcAudio.createFromURL(title, "${audio}"))
                 }
-                jcplayer.initPlaylist(jcAudios)
+//                jcplayer.initPlaylist(jcAudios)
                 val listAyat : ArrayList<Ayat> = ArrayList()
-                listAyat.addAll(realmHelper.getAyat(realm,idSurah))
+                listAyat.addAll(realmHelper.getAyat(realm, idSurah))
                 setupAdapter(list = listAyat)
+
+
 
             }
         }
@@ -170,7 +170,26 @@ class AyatPage : BaseActivity()  {
     private fun setupAdapter(list: ArrayList<Ayat> = ArrayList()){
         val adapter = AdapterAyat(list)
         scrollable_content.adapter = adapter
-        scrollable_content.layoutManager = LinearLayoutManager(this@AyatPage, RecyclerView.VERTICAL, false)
+        scrollable_content.layoutManager = LinearLayoutManager(
+            this@AyatPage,
+            RecyclerView.VERTICAL,
+            false
+        )
+
+        val jcAudios = ArrayList<JcAudio>()
+        jcAudios.clear()
+        var title: String?
+
+        for (i in list.indices){
+            title = "${list[i].latin} - ${list[i].terjemahan}"
+            val audio = "https://cdn.islamic.network/quran/audio/64/ar.alafasy/${list[i].numberInQuran}.mp3"
+            jcAudios.add(JcAudio.createFromURL(title, "${audio}"))
+        }
+
+        jcplayer.initPlaylist(jcAudios)
+
+
+
         adapter.apply {
             adapter.SetOnItemClickListener(object :
                 AdapterAyat.SetOnClickListener<Ayat> {
@@ -178,13 +197,16 @@ class AyatPage : BaseActivity()  {
                     view: View,
                     position: Int,
                     dataItem: Ayat
-                ){ Log.d("rlBanner", "onClick: Share"); }
+                ) {
+                    Log.d("rlBanner", "onClick: Share"); }
+
                 override fun onPlay(
                     view: View,
                     position: Int,
                     dataItem: Ayat
                 ) {
                     jcplayer.playAudio(jcplayer.myPlaylist!![position])
+                    jcplayer.createNotification(R.mipmap.ic_launcher_round)
                 }
 
                 override fun onBookMark(
@@ -199,17 +221,22 @@ class AyatPage : BaseActivity()  {
                 }
 
                 override fun onClickTafsir(view: View, position: Int, dataItem: Ayat) {
-                    dialogTafsirAyat(dataItem.arab.toString(),dataItem.latin.toString(),"Arti : \n${dataItem.arti} \n\n\nTafsir : \n${dataItem.tafsirAyat}")
+                    dialogTafsirAyat(
+                        dataItem.arab.toString(),
+                        dataItem.latin.toString(),
+                        "Arti : \n${dataItem.arti} \n\n\nTafsir : \n${dataItem.tafsirAyat}"
+                    )
                 }
 
             })
         }
     }
 
-    private fun dialogTafsirAyat(ayat:String,arti:String,tafsir: String) {
+    private fun dialogTafsirAyat(ayat: String, arti: String, tafsir: String) {
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
         val binding: BottomsheetTafsirAyatBinding = BottomsheetTafsirAyatBinding.inflate(
-            layoutInflater)
+            layoutInflater
+        )
 
         binding.apply {
             txtTafsir.text = tafsir
@@ -237,10 +264,11 @@ class AyatPage : BaseActivity()  {
         Utils.setWhiteNavigationBar(bottomSheetDialog)
     }
 
-    private fun dialogTafsir(title:String,subTitle:String,tafsir: String) {
+    private fun dialogTafsir(title: String, subTitle: String, tafsir: String) {
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
         val binding: BottomsheetTafsirBinding = BottomsheetTafsirBinding.inflate(
-            layoutInflater)
+            layoutInflater
+        )
 
         binding.apply {
             txtDeskripsi.text = tafsir
@@ -253,6 +281,53 @@ class AyatPage : BaseActivity()  {
         Utils.setWhiteNavigationBar(bottomSheetDialog)
     }
 
+    override fun onCompletedAudio() {
+
+    }
+
+    override fun onContinueAudio(status: JcStatus) {
+    }
+
+    override fun onJcpError(throwable: Throwable) {
+
+    }
+
+    override fun onPaused(status: JcStatus) {
+    }
+
+    override fun onPlaying(status: JcStatus) {
+    }
+
+    override fun onPreparedAudio(status: JcStatus) {
+        Log.d("binding", "onPreparedAudio: ${status.jcAudio.copy()}")
+        Log.d("binding", "Position: ${jcplayer.myPlaylist!![status.jcAudio.position!!]}")
+        scrollable_content.scrollToPosition(status.jcAudio.position!!)
+        Prefs.putString(
+            Constans.PREF_LAST_AYAT_LISTEN,"Terakhir dibaca\nSurah ${binding.txtNamaSurahId.text}"
+        )
+
+        val number = status.jcAudio.position!!+1
+        Prefs.putString(
+            Constans.PREF_LAST_NUMBER_AYAT_LISTEN,"Ayat : $number"
+        )
+    }
+
+    override fun onStopped(status: JcStatus) {
+    }
+
+    override fun onTimeChanged(status: JcStatus) {
+    }
+
+
+    fun makeMeBlink(view: View, duration: Int, offset: Int): View? {
+        val anim: Animation = AlphaAnimation(0.0f, 1.0f)
+        anim.duration = duration.toLong()
+        anim.startOffset = offset.toLong()
+        anim.repeatMode = Animation.REVERSE
+        anim.repeatCount = Animation.INFINITE
+        view.startAnimation(anim)
+        return view
+    }
 
 
 }
