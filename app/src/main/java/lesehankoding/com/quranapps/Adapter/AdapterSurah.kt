@@ -7,7 +7,6 @@ import lesehankoding.com.quranapps.Model.ModelSurah.DataItem
 import lesehankoding.com.quranapps.R
 
 class AdapterSurah:BaseRecyclerAdapter<Surah,SurahViewHolder>() {
-
     private lateinit var actionListener: SurahViewHolder.OnActionListener
 
     fun setOnActionListener(listener: SurahViewHolder.OnActionListener) {

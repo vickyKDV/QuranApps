@@ -70,6 +70,9 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     abstract fun onDestroyActivity()
 
+
+
+
     /**
      * Hide navigation
      *
@@ -97,6 +100,9 @@ abstract class BaseActivity : AppCompatActivity() {
 //            }
 //        )
     }
+
+
+
 
     /**
      * Open

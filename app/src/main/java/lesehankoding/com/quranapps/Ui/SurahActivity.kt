@@ -2,11 +2,18 @@ package lesehankoding.com.quranapps.Ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.location.Location
+import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.location.*
 import com.lesehankoding.rumahmadani.PlanerPage.wrapper_api.wrapper.Wrapper
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.Realm
@@ -14,21 +21,25 @@ import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_surah_v2.*
 import lesehankoding.com.quranapps.Adapter.AdapterSurah
 import lesehankoding.com.quranapps.Base.BaseActivity
+import lesehankoding.com.quranapps.BuildConfig
 import lesehankoding.com.quranapps.DB.RealmHelper
 import lesehankoding.com.quranapps.DB.Surah
 import lesehankoding.com.quranapps.Holder.SurahViewHolder
 import lesehankoding.com.quranapps.Model.ModelSurah.DataItem
 import lesehankoding.com.quranapps.Model.ModelSurah.ModelSurah
+import lesehankoding.com.quranapps.Model.ModelWaktuShalat.ModelWaktuShalat
+import lesehankoding.com.quranapps.R
 import lesehankoding.com.quranapps.Utils.Constans
 import lesehankoding.com.quranapps.Utils.DividerItemDecoration
+import lesehankoding.com.quranapps.Utils.PermissionUtils
+import lesehankoding.com.quranapps.Utils.Utils
 import lesehankoding.com.quranapps.databinding.ActivitySurahV2Binding
 
 
-class SurahActivity : BaseActivity(){
+class SurahActivity : BaseActivity() {
     private lateinit var binding: ActivitySurahV2Binding
     var realmHelper = RealmHelper()
     var realm = Realm.getDefaultInstance()
-
 
     override fun setLayout(): View {
         binding = ActivitySurahV2Binding.inflate(layoutInflater)
@@ -37,14 +48,23 @@ class SurahActivity : BaseActivity(){
 
     @SuppressLint("SetTextI18n")
     override fun onCreateActivity(savedInstanceState: Bundle?) {
-        binding.txtLastRead2.text = Prefs.getString(Constans.PREF_LAST_AYAT_LISTEN,"")
-        binding.txtLastRead.text = Prefs.getString(Constans.PREF_LAST_NUMBER_AYAT_LISTEN,"")
+        binding.apply {
+            textView4.text = "Assalamualaikum,"
+            textView5.text = Utils.hari()
+            txtLastRead2.text = Prefs.getString(Constans.PREF_LAST_AYAT_LISTEN, "")
+            txtLastRead.text = Prefs.getString(Constans.PREF_LAST_NUMBER_AYAT_LISTEN, "")
+            cvWaktuShalat.setOnClickListener {
+                startActivity(Intent(this@SurahActivity,JadwalShalatActivity::class.java))
+            }
+
+        }
         getData()
     }
 
     override fun onDestroyActivity() {
 
     }
+
 
     private fun getData(){
         if(!realmHelper.getCountSurah(realm)) {
@@ -105,8 +125,11 @@ class SurahActivity : BaseActivity(){
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == RESULT_OK){
             if(requestCode == 3003){
-                binding.txtLastRead2.text = Prefs.getString(Constans.PREF_LAST_AYAT_LISTEN,"")
-                binding.txtLastRead.text = Prefs.getString(Constans.PREF_LAST_NUMBER_AYAT_LISTEN,"")
+                binding.txtLastRead2.text = Prefs.getString(Constans.PREF_LAST_AYAT_LISTEN, "")
+                binding.txtLastRead.text = Prefs.getString(
+                    Constans.PREF_LAST_NUMBER_AYAT_LISTEN,
+                    ""
+                )
             }
         }
     }
@@ -131,7 +154,7 @@ class SurahActivity : BaseActivity(){
         }
         adapterSurah.setOnActionListener(object : SurahViewHolder.OnActionListener {
             override fun onItemClick(view: SurahViewHolder) {
-                val intent = Intent(this@SurahActivity,AyatPage::class.java)
+                val intent = Intent(this@SurahActivity, AyatPage::class.java)
                 intent.apply {
                     Log.d(
                         "binding",
@@ -151,29 +174,12 @@ class SurahActivity : BaseActivity(){
                     )
                 }
 
-                startActivityForResult(intent,3003)
+                startActivityForResult(intent, 3003)
 
-//                openActivity<AyatPage> {
-//                    Log.d(
-//                        "binding",
-//                        "onItemClick: ${listItem[view.adapterPosition]?.id.toString()}"
-//                    );
-//                    putString("id", listItem[view.adapterPosition]?.id.toString())
-//                    putString("namaSurah", listItem[view.adapterPosition]?.surahNameID)
-//                    putString("arti", listItem[view.adapterPosition]?.surahArti.toString())
-//                    putString(
-//                        "diturunkan",
-//                        listItem[view.adapterPosition]?.surahDiturunkan.toString()
-//                    )
-//                    putString("tafsir", listItem[view.adapterPosition]?.tafsirSurah.toString())
-//                    putString(
-//                        "title",
-//                        listItem[view.adapterPosition]?.surahNameID.toString() + " - " + listItem[view.adapterPosition]?.jumlahSurah.toString() + " Ayat"
-//                    )
-//                }
             }
         })
     }
+
 
 
 

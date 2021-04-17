@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lnsalam">
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/viewBanner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -37,6 +37,7 @@
                     android:layout_marginStart="@dimen/_80ssp"
                     android:contentDescription="@string/todo"
                     android:scaleType="centerCrop"
+                    android:alpha="0.4"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +80,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
 
@@ -98,7 +99,7 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/assalamualaikum" />
+            android:text="@string/tanggal" />
 
         <TextView
             android:id="@+id/textView5"
@@ -106,7 +107,6 @@
             android:layout_height="wrap_content"
             android:text="@string/sample_name"
             android:textSize="@dimen/_12ssp"
-            android:textStyle="bold"
             tools:text="Kyan Al'Khadavie" />
     </LinearLayout>
 
@@ -159,7 +159,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rlBanner" />
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/bottomView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -180,8 +180,8 @@
             android:background="@drawable/bg_gradient"
             android:padding="@dimen/_4sdp">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/shadowView2"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvCariMasjid"
                 android:layout_width="@dimen/_28sdp"
                 android:layout_height="@dimen/_28sdp"
                 android:layout_marginEnd="@dimen/_24sdp"
@@ -202,10 +202,10 @@
                     android:contentDescription="@string/todo"
                     android:padding="@dimen/_2sdp"
                     app:srcCompat="@drawable/ic_masque" />
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/shadowView"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvWaktuShalat"
                 android:layout_width="@dimen/_28sdp"
                 android:layout_height="@dimen/_28sdp"
                 android:layout_marginStart="@dimen/_24sdp"
@@ -226,9 +226,10 @@
                     android:alpha="6"
                     android:contentDescription="@string/todo"
                     app:srcCompat="@drawable/ic_baseline_access_time_24" />
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvBacaQuran"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:backgroundColor="@color/white"
@@ -236,8 +237,8 @@
                 app:cardCornerRadius="@dimen/_100sdp"
                 app:cornerRadius="@dimen/_100sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/shadowView2"
-                app:layout_constraintStart_toEndOf="@+id/shadowView"
+                app:layout_constraintEnd_toStartOf="@id/cvCariMasjid"
+                app:layout_constraintStart_toEndOf="@id/cvWaktuShalat"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
@@ -252,8 +253,8 @@
                     app:layout_constraintStart_toEndOf="@+id/imgBookmark"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_baseline_menu_book_24" />
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.motion.widget.MotionLayout>

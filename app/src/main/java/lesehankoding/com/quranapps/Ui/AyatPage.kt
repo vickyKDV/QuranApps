@@ -1,5 +1,6 @@
 package lesehankoding.com.quranapps.Ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -23,6 +24,7 @@ import lesehankoding.com.quranapps.DB.Ayat
 import lesehankoding.com.quranapps.DB.RealmHelper
 import lesehankoding.com.quranapps.Model.*
 import lesehankoding.com.quranapps.Model.ModelAyat.*
+import lesehankoding.com.quranapps.Model.ModelWaktuShalat.ModelWaktuShalat
 import lesehankoding.com.quranapps.R
 import lesehankoding.com.quranapps.Utils.Constans
 import lesehankoding.com.quranapps.Utils.Utils
@@ -53,6 +55,8 @@ class AyatPage : BaseActivity(), JcPlayerManagerListener {
 
     }
 
+
+
     override fun onDestroy() {
         setResult(RESULT_OK)
         super.onDestroy()
@@ -63,6 +67,8 @@ class AyatPage : BaseActivity(), JcPlayerManagerListener {
         setResult(RESULT_OK)
         super.onBackPressed()
     }
+
+
 
 
     private fun getSurah(numberOfSurah: String){
@@ -123,7 +129,9 @@ class AyatPage : BaseActivity(), JcPlayerManagerListener {
             onBackPressed()
         }
 
+
         getSurah(intent.getStringExtra("id")!!)
+
 
         jcplayer.jcPlayerManagerListener = this@AyatPage
     }

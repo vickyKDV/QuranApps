@@ -1,18 +1,20 @@
 package lesehankoding.com.quranapps.Utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Window
 import android.view.WindowManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.huhx0015.hxaudio.audio.HXMusic
-import com.huhx0015.hxaudio.model.HXMusicItem
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 object Utils {
     fun setWindowFlag(activity: Activity, bits: Int, on: Boolean) {
@@ -43,6 +45,40 @@ object Utils {
             }
             window.setBackgroundDrawable(windowBackground)
         }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getYearAndMonth(): String? {
+        val df: DateFormat = SimpleDateFormat("yyyy-MM")
+        return df.format(Calendar.getInstance().time)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getDateToday(): String? {
+        val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+        return df.format(Calendar.getInstance().time)
+    }
+
+    fun hari(): String? {
+        val today = Date()
+        val df = SimpleDateFormat("H")
+        val formattedDate = df.format(today)
+        Log.d("Format Date", formattedDate)
+        val jam = formattedDate.toInt()
+        var kondisiHari = ""
+        kondisiHari = if (jam >= 0 && jam <= 12) {
+            "Selamat pagi"
+        } else if (jam > 12 && jam <= 15) {
+            "Selamat siang"
+        } else if (jam > 12 && jam <= 19) {
+            "Selamat sore"
+        } else if (jam > 19 && jam <= 23) {
+            "Selamat malam"
+        } else {
+            "Selamat pagi"
+        }
+        Log.d("Utils", "jam: $jam")
+        return kondisiHari
     }
 
 }

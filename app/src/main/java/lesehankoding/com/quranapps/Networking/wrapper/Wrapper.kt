@@ -7,6 +7,7 @@ import com.lesehankoding.rumahmadani.PlanerPage.wrapper_api.utils.SchedulerProvi
 import io.reactivex.disposables.CompositeDisposable
 import lesehankoding.com.quranapps.Model.ModelAyat.ModelAyatv3
 import lesehankoding.com.quranapps.Model.ModelSurah.ModelSurah
+import lesehankoding.com.quranapps.Model.ModelWaktuShalat.ModelWaktuShalat
 
 object Wrapper {
 
@@ -51,6 +52,26 @@ object Wrapper {
         onLoading()
         compositeDisposable.add(
             repository.getAyat(numberOfSurah = numberOfSurah)
+                .compose(schedulerProvider.ioToMainFlowableScheduler())
+                .subscribe (
+                    { resultData -> onSuccess(resultData) },
+                    {throwable -> ErrorHanlder.errorHandle(throwable as ANError, onError)}
+                )
+        )
+
+
+    }
+
+    fun getWaktuShalat(
+        latitude:String,
+        longitude:String,
+        onLoading: (() -> Unit),
+        onSuccess: ((ModelWaktuShalat) -> Unit),
+        onError: (( String) -> Unit)
+    ){
+        onLoading()
+        compositeDisposable.add(
+            repository.getWaktuShalat(latitude, longitude)
                 .compose(schedulerProvider.ioToMainFlowableScheduler())
                 .subscribe (
                     { resultData -> onSuccess(resultData) },

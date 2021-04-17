@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import lesehankoding.com.quranapps.Holder.BaseItemViewHolder
+import lesehankoding.com.quranapps.Model.ModelWaktuShalat.DatetimeItem
 import java.util.ArrayList
 
 abstract class BaseRecyclerAdapter<Data, Holder : BaseItemViewHolder<Data>> : RecyclerView.Adapter<Holder>() {
