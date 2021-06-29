@@ -27,18 +27,4 @@ class Repository: ApiService {
             .getObjectFlowable(ModelWaktuShalat::class.java)
     }
 
-//
-//    override fun getPekerjaan(): Flowable<List<ResponseListItem>> {
-//        return Rx2AndroidNetworking.get(CommonDataConfig.common_job)
-//            .build()
-//            .getObjectListFlowable(ResponseListItem::class.java)
-//    }
-//
-//
-//    override fun getTypeRestaurant(): Single<JSONArray> {
-//        return Rx2AndroidNetworking.get(CommonDataConfig.type_restoran)
-//            .build()
-//            .jsonArraySingle
-//    }
-//
 }
